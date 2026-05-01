@@ -1,38 +1,20 @@
-#  おやつ在庫管理モジュール (Snacks Inventory Management)
-## おやつ在庫メモ 🍪 (Snack Inventory Manager)
-学童保育などでおやつの在庫をスマートに管理できるWebアプリ。スマートフォンのカメラでパッケージの写真を撮るだけで、Gemini AI (2.5 Flash) が「おやつ名」「賞味期限」「個数」を自動抽出してFirebase Firestoreに保存します。同じおやつは自動でマージされ、増減や期限チェックが直感的なUIで簡単に行なえる、先生のための在庫管理ツールです。
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-## 概要 (Overview)
-「おやつ在庫管理モジュール」は、学童保育やオフィス、家庭での「おやつ（軽食）」の在庫をスマートに管理するためのWebアプリケーションです。
-スマートフォンのカメラ等でお菓子のパッケージや納品書の写真を撮るだけで、AIが「商品名」「賞味期限」「個数」を自動で読み取り、在庫データベースに登録します（手動入力にも対応）。賞味期限ごとの在庫管理や、ワンタップでの個数調整機能などを備えています。
+# Run and deploy your AI Studio app
 
-## 主な機能 (Features)
+This contains everything you need to run your app locally.
 
-* **AI画像解析による自動入力**
-  * Google Gemini AIを活用し、アップロードされたお菓子の画像から「おやつのなまえ」「賞味期限」「かず」を自動抽出します。
-* **手動入力対応**
-  * 写真認識だけでなく、手動で細かい在庫登録を行うことも可能です
-* **自動合算機能**
-  * 同じ商品名・同じ賞味期限のおやつが登録された場合、自動で既存のデータに個数を足し合わせます。
-* **スマート在庫ボード**
-  * おやつの名前ごとにグループ化し、異なる賞味期限を見やすく一覧表示。合計個数も自動計算されます。
-* **簡単な在庫調整**
-  * 一覧ボードからワンボタン（＋ / −）で直感的に個数管理ができ、不要になったデータはごみ箱ボタンで削除できます。
-* **Googleログイン認証**
-  * Firebase Authを利用したセキュアなログインを提供し、ユーザーごとのデータを安全に管理します（Firestore セキュリティルール適用済）。
-## 技術スタック (Tech Stack)
-* **フロントエンド (Frontend)**
-  * React 18、TypeScript、Tailwind CSS (スタイリング / レスポンシブ対応)、Vite (ビルドツール)、Lucide React (アイコン)
-* **AI・機械学習 (AI/ML)**
-  * Google Gemini API (@google/genes) - 画像認識・データ抽出
-* **バックエンド・データベース (Backend/Database)**
-  * Firebase、Authentication (Googleアカウント連携)、Cloud Firestore (リアルタイムデータベース)
- 
-## 使い方 (How to use)
-1. **ログインする**右上にある「先生ログイン」ボタンを押し、自身のGoogleアカウントでログインします。（在庫を保存・閲覧するために必要です）
-2. **おやつを登録する （2つの方法）**
-  * AIにお任せ📸: 「📝おやつを登録」タブで、枠の中にパッケージの写真をポイッと入れるか、タップして写真を選びます（スマホならカメラが起動します）。AIが一生懸命読み取って、入力欄を自動で埋めてくれます。
-  * 手動で打つ✍️: 写真を使わない場合は「✍️ 自分で手入力する」ボタンを押し、名前・期限・個数を自分で打ち込みます。
-3. **内容が合っていれば「データベースに保存」を押して登録完了です！**
-4. **在庫をみる・管理する** 「📦在庫を見る」タブに切り替えると、現在のおやつが種類ごとにまとまって表示されます。
-※ おやつを使ったり補充したときは、表の「＋」「ー」ボタンで手軽に個数を変えられます。間違えて登録した行や、在庫がゼロになって消したい行は、右端の「ゴミ箱」アイコンを押して「はい」を選ぶと消去できます。
+View your app in AI Studio: https://ai.studio/apps/929d8467-e98e-493c-9b01-f641ec4ba9d0
+
+## Run Locally
+
+**Prerequisites:**  Node.js
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
