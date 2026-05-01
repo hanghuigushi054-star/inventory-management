@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isSignedIn() { return request.auth != null && request.auth.token.email_verified == true; }
+    
+    function isValidInventoryItem(data) {
+      let isBasicValid = data.keys().hasAll(['itemName', 'quantity', 'createdBy', 'createdAt']) &&
+             data.keys().size() >= 4 && data.keys().size() <= 5 &&
+             data.itemName is string && data.itemName.size() > 0 && data.itemName.size() <= 200 &&
+             data.quantity is int && data.quantity >= 1 &&
+             data.createdBy == request.auth.uid;
+             
+      let isExpDateValid = !('expirationDate' in data) || data.expirationDate == null || (data.expirationDate is string && data.expirationDate.size() <= 20);
+      return isBasicValid && isExpDateValid;
+    }
+
+    match /inventory/{itemId} {
+      allow read: if isSignedIn() && existing().createdBy == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.createdBy == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(itemId) && 
+                    isValidInventoryItem(incoming()) && 
+                    incoming().createdAt == request.time;
+      allow update: if isSignedIn() && isValidId(itemId) &&
+                    existing().createdBy == request.auth.uid &&
+                    incoming().diff(existing()).affectedKeys().hasOnly(['quantity']) &&
+                    incoming().quantity is int && incoming().quantity >= 0 &&
+                    incoming().createdBy == existing().createdBy &&
+                    incoming().itemName == existing().itemName &&
+                    incoming().createdAt == existing().createdAt;
+      allow delete: if isSignedIn() && isValidId(itemId) && existing().createdBy == request.auth.uid;
+    }
+  }
+}

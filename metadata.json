@@ -1,0 +1,8 @@
+{
+  "name": "おやつ在庫管理モジュール",
+  "description": "お菓子の画像や納品書から商品名、賞味期限、個数を自動抽出するシステム",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": []
+}
